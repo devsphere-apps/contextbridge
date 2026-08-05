@@ -1,26 +1,23 @@
-from pathlib import Path
+import re
 
 import typer
+from rich import print
 
-from contextbridge.inputs.claude.conversations import ConversationParser
-from contextbridge.inputs.claude.loader import ClaudeLoader
+from contextbridge.core.context import build_context
+from contextbridge.outputs.markdown.exporter import MarkdownExporter
 from contextbridge.version import __version__
 
 app = typer.Typer(
-    help="ContextBridge - Universal AI project migration toolkit."
+    help="ContextBridge - Universal AI project migration toolkit"
 )
-
-
-@app.callback()
-def main():
-    """ContextBridge CLI."""
-    pass
 
 
 @app.command()
 def version():
-    """Show the current version."""
-    typer.echo(f"ContextBridge v{__version__}")
+    """
+    Show ContextBridge version.
+    """
+    print(f"ContextBridge v{__version__}")
 
 
 @app.command()
@@ -29,24 +26,95 @@ def inspect(path: str):
     Inspect a Claude export.
     """
 
-    export_path = Path(path)
+    context = build_context(path)
 
-    loader = ClaudeLoader(export_path)
+    print("[green]✓ Claude export detected[/green]")
+    print()
+    print(f"Conversations: {len(context.conversations)}")
 
-    if not loader.is_valid_export():
-        typer.secho("❌ Invalid Claude export.", fg=typer.colors.RED)
-        raise typer.Exit(code=1)
+    total_messages = sum(
+        len(c.messages)
+        for c in context.conversations
+    )
 
-    parser = ConversationParser(export_path)
-    conversations = parser.load()
+    print(f"Messages:      {total_messages}")
 
-    message_count = sum(len(c.messages) for c in conversations)
 
-    typer.secho("✓ Claude export detected", fg=typer.colors.GREEN)
-    typer.echo()
+@app.command()
+def export(
+    path: str,
+    format: str = typer.Option(
+        "markdown",
+        "--format",
+        "-f",
+        help="Export format.",
+    ),
+    output: str = typer.Option(
+        "exports",
+        "--output",
+        "-o",
+        help="Output directory.",
+    ),
+    conversation: str | None = typer.Option(
+        None,
+        "--conversation",
+        "-c",
+        help="Export a single conversation by UUID.",
+    ),
+    url: str | None = typer.Option(
+        None,
+        "--url",
+        help="Claude conversation URL.",
+    ),
+):
+    """
+    Export a Claude project.
+    """
 
-    typer.echo(f"Conversations: {len(conversations)}")
-    typer.echo(f"Messages:      {message_count}")
+    context = build_context(path)
+
+    if url:
+        match = re.search(
+            r"/chat/([0-9a-fA-F-]+)",
+            url,
+        )
+
+        if not match:
+            raise typer.BadParameter(
+                "Invalid Claude conversation URL."
+            )
+
+        conversation = match.group(1)
+
+    if conversation:
+        context = context.filter_conversations(
+            [conversation]
+        )
+
+        if not context.conversations:
+            raise typer.BadParameter(
+                f"Conversation '{conversation}' not found."
+            )
+
+    if format.lower() == "markdown":
+        MarkdownExporter().export(
+            context,
+            output,
+        )
+
+        if conversation:
+            print(
+                f"[green]✓ Exported 1 conversation to {output}[/green]"
+            )
+        else:
+            print(
+                f"[green]✓ Exported {len(context.conversations)} conversations to {output}[/green]"
+            )
+
+    else:
+        raise typer.BadParameter(
+            f"Unsupported format: {format}"
+        )
 
 
 if __name__ == "__main__":
