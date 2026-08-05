@@ -21,7 +21,6 @@ Instead of locking conversations inside a single AI platform, ContextBridge tran
 - ✅ Export all conversations
 - ✅ Export a single conversation by UUID
 - ✅ Export directly from a Claude conversation URL
-- 🚧 Support for additional AI providers
 
 ## Installation
 
@@ -82,39 +81,6 @@ contextbridge export \
 ~/Downloads/claude-export \
 --url "https://claude.ai/chat/c389aee2-0811-4326-a898-f3871969eaf7"
 ```
-
-## Roadmap
-
-### v0.1 ✅
-
-- [x] Claude export loader
-- [x] Conversation parser
-- [x] Message parser
-- [x] Project inspection
-- [x] Universal `ProjectContext`
-- [x] Markdown knowledge base exporter
-- [x] Export CLI
-- [x] Export by conversation UUID
-- [x] Export by Claude conversation URL
-
-### v0.2
-
-- [ ] Improve Markdown knowledge base
-- [ ] Export attachments and referenced files
-- [ ] Generate `index.md`
-- [ ] Better conversation organization
-
-### v0.3
-
-- [ ] Claude memories parser
-- [ ] Claude projects parser
-- [ ] Universal AI Project Format (UAPF)
-
-### Future
-
-- [ ] Cursor compatibility
-- [ ] Gemini compatibility
-- [ ] Additional AI providers
 
 ## License
 
