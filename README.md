@@ -42,6 +42,83 @@ pip install -e .
 
 ---
 
+# Export Your Project from Claude
+
+Before using ContextBridge, you need to export your data from Claude.
+
+## Step 1 — Open Claude
+
+Go to:
+
+```
+https://claude.ai
+```
+
+Log in to your account.
+
+---
+
+## Step 2 — Open Settings
+
+Click your profile icon in the bottom-left corner.
+
+Open:
+
+```
+Settings
+```
+
+---
+
+## Step 3 — Export Your Data
+
+Navigate to:
+
+```
+Settings → Data & Privacy → Export Data
+```
+
+Request your export.
+
+Claude will prepare your data and send you a download link by email.
+
+---
+
+## Step 4 — Download the Export
+
+Download the exported ZIP file from the email.
+
+Example:
+
+```
+claude-export.zip
+```
+
+---
+
+## Step 5 — Extract the ZIP
+
+Extract it to a folder.
+
+Example:
+
+```
+~/Downloads/claude-export/
+```
+
+The extracted folder should contain files similar to:
+
+```text
+claude-export/
+├── conversations.json
+├── memories.json
+├── projects/
+├── account.json
+└── ...
+```
+
+This folder is the input for ContextBridge.
+
 # Usage
 
 ## Show version
