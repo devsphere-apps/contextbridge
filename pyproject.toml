@@ -6,16 +6,26 @@ build-backend = "setuptools.build_meta"
 name = "contextbridge"
 version = "0.1.0"
 description = "Universal AI project migration toolkit"
-authors = [
-    {name = "Abdul Mateen"}
-]
 readme = "README.md"
 requires-python = ">=3.11"
 
-dependencies = [
-    "typer",
-    "rich",
-    "pydantic",
-    "jinja2",
-    "orjson"
+authors = [
+    { name = "Abdul Mateen", email = "devsphere.apps@gmail.com" }
 ]
+
+dependencies = [
+    "typer>=0.16.0",
+    "rich>=14.0.0",
+    "pydantic>=2.11.0",
+    "jinja2>=3.1.0",
+    "orjson>=3.10.0",
+]
+
+[project.scripts]
+contextbridge = "contextbridge.main:app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
