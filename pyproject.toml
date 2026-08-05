@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contextbridge"
+version = "0.1.0"
+description = "Universal AI project migration toolkit"
+authors = [
+    {name = "Abdul Mateen"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "typer",
+    "rich",
+    "pydantic",
+    "jinja2",
+    "orjson"
+]
